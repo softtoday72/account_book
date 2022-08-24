@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List</title>
+  <link href="https://bootswatch.com/5/united/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+  <header>
+    <nav class="navbar navbar-dark bg-primary justify-content-between" style="padding: 8px 16px;">
+      <a class="navbar-brand" href="/">
+        {{#if isAuthenticated}}{{ user.name}}'s {{/if}}
+        Todo List
+      </a>
+      {{#if isAuthenticated}}
+      <a href="/users/logout" class="btn btn-outline-light">Logout</a>
+      {{else}}
+      <a href="/users/login" class="btn btn-outline-light">Login</a>
+      {{/if}}
+    </nav>
+  </header>
+  <main>
+    <div class="container mt-3">
+      {{{ body }}}
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
