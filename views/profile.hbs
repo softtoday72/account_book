@@ -1,0 +1,54 @@
+<div class="container pt-4">
+  <div class="row">
+    <div class="col-2 px-0">
+      <nav class="nav flex-column">
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/">首頁</a>
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/detail">詳細資料</a>
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/create">建立</a>
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3 btn btn-outline-primary active" style="width:50%" href="/profile/{{user.id}}">帳戶設定</a>
+      </nav>
+    </div>
+    <div class="col-9 border-start border-end">
+      <h3 class="my-3 px-4 mx-0 fw-bold">帳戶設定</h3>
+      <hr>
+      <form action="/profile/{{user.id}}?_method=PUT" method="POST">
+        <div class="form-floating mb-3 bg-light">
+          <input type="text" class="form-control bg-light border-0" id="account" placeholder="Account" name="account"
+            value="{{user.account}}" required>
+          <label for="account">帳號</label>
+          <hr style="border:1px solid;">
+        </div>
+        <div class="form-floating mb-3 bg-light">
+          <input type="text" class="form-control bg-light border-0" id="name" placeholder="Name" name="name"
+            value="{{user.name}}" maxlength="50" required>
+          <label for="name">名稱</label>
+          <hr style="border:1px solid;">
+        </div>
+        <div class="form-floating mb-3 bg-light">
+          <input type="email" class="form-control bg-light border-0" id="email" placeholder="name@example.com"
+            name="email" value="{{user.email}}" required>
+          <label for="email">Email</label>
+          <hr style="border:1px solid;">
+        </div>
+        <div class="mb-3 bg-light">
+          <label style="margin-left:10px; color:gray;" for="password">密碼</label>
+          <input type="password" class="form-control bg-light border-0" id="password" placeholder="請設定密碼" name="password"
+            required>
+
+          <hr style="border:1px solid;">
+        </div>
+        <div class="mb-3 bg-light">
+          <label style="margin-left:10px; color:gray;" for="passwordCheck">密碼再確認</label>
+          <input type="password" class="form-control bg-light border-0" id="passwordCheck" placeholder="請再次輸入密碼"
+            name="passwordCheck" required>
+
+          <hr style="border:1px solid;">
+        </div>
+        <div class="row justify-content-end mx-3">
+          <button class="btn btn-primary btn-block rounded-pill border-0" type="submit"
+            style="background-color:#FF6600; width: auto;">儲存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

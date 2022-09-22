@@ -1,0 +1,51 @@
+<div class="container pt-4">
+  <div class="row">
+    <div class="col-2 px-0">
+      <nav class="nav flex-column">
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/">首頁</a>
+
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/detail">詳細資料</a>
+
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3 btn btn-outline-primary active" style="width:50%" href="/create">建立</a>
+
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/profile/{{user.id}}">帳戶設定</a>
+
+      </nav>
+    </div>
+  <div class="col">
+    <form action="/create" method="POST">
+
+      <div class="mb-4 text-center">
+        <h1 class="h3 font-weight-normal mb-3">花費紀錄</h1>
+      </div>
+
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="name" name="name" placeholder="消費名稱">
+        <label for="name">消費名稱</label>
+      </div>
+
+      <div class="form-row mb-3">
+        <select class="form-control" id="categoryId" name="categoryId">
+          <option>類別</option>
+          {{#each categories}}
+          <option value="{{this.id}}">{{this.name}}</option>
+          {{/each}}
+        </select>
+      </div>
+      
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="price" name="price" placeholder="金額">
+        <label for="price">金額</label>
+      </div>
+
+      
+      <div class="flex-fill mb-3">
+        <input type="date" name="date" class="form-control" id="date" value="{{date}}">
+      </div>
+      
+
+      <button type="submit" class="btn btn-primary">送出</button>
+      <a href="/" class="btn btn-primary">回首頁</a>
+    </form>
+  </div>
+</div>

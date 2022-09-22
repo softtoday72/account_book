@@ -1,0 +1,37 @@
+<form action="/edit/{{account.id}}?_method=PUT" method="POST">
+
+  <div class="mb-4 text-center">
+    <h1 class="h3 font-weight-normal mb-3">修改紀錄</h1>
+  </div>
+
+  <div class="form-floating mb-3">
+    <input type="text" class="form-control" id="name" name="name" placeholder="消費名稱" value="{{account.name}}">
+    <label for="name">消費名稱</label>
+  </div>
+
+  <div class="form-row mb-3">
+    <select class="form-control" id="categoryId" name="categoryId">
+      {{#if categoryIdToString}}
+      <option value="{{account.categoryId}}">{{categoryIdToString}}</option>
+      {{else}}<option>類別</option>
+      {{/if}}
+      {{#each categories}}
+      <option value="{{this.id}}">{{this.name}}</option>
+      {{/each}}
+    </select>
+  </div>
+
+  <div class="form-floating mb-3">
+    <input type="text" class="form-control" id="price" name="price" placeholder="金額" value="{{account.price}}">
+    <label for="price">金額</label>
+  </div>
+
+
+  <div class="flex-fill mb-3">
+    <input type="date" name="date" class="form-control" id="date" value="{{account.date}}">
+  </div>
+
+
+  <button type="submit" class="btn btn-primary">送出</button>
+  <a href="/" class="btn btn-primary">回首頁</a>
+</form>

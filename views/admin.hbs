@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="row">
+    <div class="col-2 px-0">
+      <nav class="nav flex-column">
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/">首頁</a>
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/detail">詳細資料</a>
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/create">建立</a>
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" style="width:50%"
+          href="/profile/{{user.id}}">帳戶設定</a>
+      </nav>
+    </div>
+  
+    <div class="col">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">id</th>
+            <th scope="col">account</th>
+            <th scope="col">password</th>
+            <th scope="col">e-mail</th>
+            <th scope="col">is_admin</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each users}}
+          <form action="/admin/{{this.id}}?_method=PUT" method="POST">
+          <tr>
+            <td>
+              <input type="text" name="id" value="{{this.id}}" style="width:50px">
+            </td>  
+            <td>
+              <input type="text" name="account" value="{{this.account}}" style="width:150px">
+            </td>
+            <td>
+              <input type="text" name="password">
+            </td>
+            <td>
+              <input type="email" name="email" value="{{this.email}}">
+            </td>
+            <td>
+              <input type="checkbox" name="is_admin" {{#if this.isAdmin}}checked{{/if}}>
+            </td>
+            <td>
+              <button class="btn btn-primary btn-block rounded-pill border-0" type="submit"
+                style="background-color:#FF6600; width: auto;">儲存</button>
+            </td>  
+          </tr>
+          </form>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
