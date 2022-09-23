@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   Account.init({
     name: DataTypes.STRING,
-    price: DataTypes.STRING,
+    price: DataTypes.INTEGER,
     userId: DataTypes.INTEGER,
     categoryId: DataTypes.INTEGER,
     date: DataTypes.DATE

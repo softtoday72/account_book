@@ -99,24 +99,62 @@ const accountController = {
       })
   },
   detailPage : (req, res, next) => {
-    const { year, month } = req.body
-    const year_month = dayjs().format(`YYYY/MM`)
+    const { year, month, order } = req.body
+    const currentYear = dayjs().format(`YYYY`)
+    const currentMonth = dayjs().format(`MM`)
     const userId = req.user.id
     const categoryId = Number(req.query.categoryId) || ''
-    //dayjs(data.date).format(`MM`)
-    // => 09
-    if(year && month) {
+    let ordering = req.body.order || ['date', 'ASC']
+    let star = ''
+    let end = ''
+    const orderChange = {
+      1: '依建立時間',
+      2: '依金額 大=>小',
+      3: '依金額 小=>大',
+    }
+
+    let orderToString = orderChange[Number(order)]
+      
+    if (year) {
+      star += year
+      end  += year
+    } else {
+      star += currentYear
+      end  += currentYear
+    }
+    star +=  '/'
+    end  +=  '/'
+    if (month) {
+      star += month
+      end  += month
+    } else {
+      star += currentMonth
+      end  += currentMonth
+    }
+
+    star = star +'/1'
+    end = end + '/31'
+
+    if (order == '1') {
+      ordering = ['date', 'ASC']
+    } else if (order == '2') {
+      ordering = ['price', 'DESC']
+    } else if (order == '3') {
+      ordering = ['price', 'ASC']
+    }
+ 
       Promise.all([Account.findAll({
         raw: true,
         nest: true,
         where: {
           date: {
-            [Op.between]: [`${year}/${month}/1`, `${year}/${month}/31`]
+            [Op.between]: [star, end]
           },
           ...categoryId ? { categoryId } : {} 
+
         },
         order:[
-          ['date','ASC']
+          ordering
         ],
         include: [
           { model: User, where: { id: userId } }
@@ -140,57 +178,13 @@ const accountController = {
             total += Number(accounts[i].price)
             accounts[i].categoryIdToString = categoryChange[accounts[i].categoryId]
           }
-          res.render('detail', { accounts, total, year, month, categories, categoryId })
+          res.render('detail', { accounts, total, year, month, categories, categoryId, orderToString, order })
         })
         .catch(error => {
           console.log(error)
           res.render('errorPage', { error: error.message })
           next(error)
         })
-    } else {
-      Promise.all([Account.findAll({
-        raw: true,
-        nest: true,
-        where: {
-          date: {
-            [Op.between]: [`${year_month}/1`, `${year_month}/31`]
-          },
-           ...categoryId ? { categoryId } : {} 
-        },
-        order: [
-          ['date', 'ASC']
-        ],
-        include: [
-          { model: User, where: { id: userId } }
-        ]
-      }), Category.findAll({
-        raw: true
-      })])
-        .then(([accounts, categories]) => {
-          for (let i = 0; i < accounts.length; i++) {
-            accounts[i].date = dayjs(accounts[i].date).format(`YYYY-MM-DD`)
-          }
-          let total = 0
-          const categoryChange = {
-            1: '飲食',
-            2: '交通',
-            3: '超市',
-            4: '帳單',
-            5: '其他'
-          }
-          for (let i = 0; i < accounts.length; i++) {
-            total += Number(accounts[i].price)
-            accounts[i].categoryIdToString = categoryChange[accounts[i].categoryId]
-          }
-          res.render('detail', { accounts, total, categories, categoryId })
-        })
-        .catch(error => {
-          console.log(error)
-          res.render('errorPage', { error: error.message })
-          next(error)
-        })
-    }
-    
   },
   editExpensePage: (req, res, next) => {
     Promise.all([

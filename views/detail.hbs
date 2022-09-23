@@ -29,11 +29,17 @@
       </div>
       <br>
       <div class="col">
-      <form action="/detail" method="POST">
+      <form action="/detail{{#if categoryId}}?categoryId={{categoryId}}{{/if}}" method="POST">
         <div class="input-group" style="width: 50%;">
           <span class="input-group-text"> 年 / 月</span>
           <input type="text" aria-label="year" name="year" value="{{year}}" class="form-control">
           <input type="text" aria-label="month" name="month" value="{{month}}" class="form-control">
+          <select class="form-select" name="order" aria-label="Default select example">
+            <option value="{{order}}">{{orderToString}}</option>
+            <option value="1">依建立時間</option>
+            <option value="2">依金額 大=>小</option>
+            <option value="3">依金額 小=>大</option>
+          </select>
           <button type="submit" class="btn btn-primary">查詢</button>
         </div>
       </form>
