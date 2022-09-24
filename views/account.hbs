@@ -1,88 +1,122 @@
 <div class="container pt-4">
-<div class="row">
-  
-  <div class="col-2 px-0">
-    <nav class="nav flex-column">
-      <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3 btn btn-outline-primary active" style="width:50%" href="/">首頁</a>
+  <div class="row">
 
-      <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/detail">詳細資料</a>
+    <div class="col-2 px-0">
+      <nav class="nav flex-column">
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3 btn btn-outline-primary active" style="width:50%" href="/">首頁</a>
 
-      <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/create">建立</a>
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/detail">詳細資料</a>
 
-      <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/profile/{{user.id}}">帳戶設定</a>
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/create">建立</a>
 
-    </nav>
-  </div>
-  
-<div class="col-10 border-start border-end ">
-  <div class="col">
-    <h4>現在是 {{ currentMonth }}</h4>
-    <P>請輸入欲查詢時間</P>
-  </div>
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/profile/{{user.id}}">帳戶設定</a>
+
+      </nav>
+    </div>
+
+    <div class="col-10 border-start border-end ">
+      <div class="col">
+        <h4>現在是 {{ currentMonth }}</h4>
+        <P>請輸入欲查詢時間</P>
+      </div>
 
 
-<form action="/search" method="POST">
-<div class="input-group" style="width: 40%;">
-  <span class="input-group-text"> 年 / 月</span>
-  <input type="text" aria-label="year" name="year" value="{{year}}" class="form-control">
-  <input type="text" aria-label="month" name="month" value="{{month}}" class="form-control">
-  <button type="submit" class="btn btn-primary">查詢</button>
-</div>
-</form>
+      <form action="/search" method="POST">
+        <div class="input-group" style="width: 40%;">
+          <span class="input-group-text"> 年 / 月</span>
+          <input type="text" aria-label="year" name="year" value="{{year}}" class="form-control">
+          <input type="text" aria-label="month" name="month" value="{{month}}" class="form-control">
+          <button type="submit" class="btn btn-primary">查詢</button>
+        </div>
+      </form>
 
-<br>
+      <br>
 
-<table class="table" style="width:70%">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">項目</th>
-      <th scope="col"  style="text-align: end">總金額</th>
+      <table class="table" style="width:70%">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">項目</th>
+            <th scope="col" style="text-align: end">總金額</th>
+
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>飲食</td>
+            <td style="text-align: end">{{ food }}</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>交通</td>
+            <td style="text-align: end">{{ traffic }}</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td>超市</td>
+            <td style="text-align: end">{{ superMarket }}</td>
+          </tr>
+          <tr>
+            <th scope="row">4</th>
+            <td>帳單</td>
+            <td style="text-align: end">{{ bill }}</td>
+          </tr>
+          <tr>
+            <th scope="row">5</th>
+            <td>其他</td>
+            <td style="text-align: end">{{ other }}</td>
+          </tr>
+        </tbody>
+      </table>
+
       
-    </tr>
-  </thead>
-  
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>飲食</td>
-      <td style="text-align: end">{{ food }}</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>交通</td>
-      <td style="text-align: end">{{ traffic }}</td>           
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>超市</td>
-      <td style="text-align: end">{{ superMarket }}</td>
-    </tr>
-    <tr>
-      <th scope="row">4</th>
-      <td>帳單</td>
-      <td style="text-align: end">{{ bill }}</td>
-    </tr>
-    <tr>
-      <th scope="row">5</th>
-      <td>其他</td>
-      <td style="text-align: end">{{ other }}</td>
-    </tr>
-  </tbody>
-</table>
+      <div class="row justify-content-end" style="width:90%">
+        <div class="col-4">
+          已消費金額
+          {{ total }}
+        </div>
+      
+      </div>
+      <br><br>
+      <canvas id="myChart" width="400" height="120"></canvas>
+      
+      <br><br>
 
-<br><br>
-<div class="row justify-content-end" style="width:85%">
-  <div class="col-4">
-  已消費金額
-  {{ total }}
+    </div>
   </div>
-</div>
-
-
-<br><br>
 
 </div>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const labels = [
+    '飲食',
+    '交通',
+    '超市',
+    '帳單',
+    '其他',
+  ];
 
-</div>
+  const data = {
+    labels: labels,
+    datasets: [{
+      label: '消費金額',
+      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)',
+      data: [ {{food}}, {{ traffic }}, {{ superMarket }}, {{ bill }}, {{ other }} ],
+    }]
+  };
+
+  const config = {
+    type: 'bar',
+    data: data,
+    options: {}
+  };
+</script>
+<script>
+  const myChart = new Chart(
+    document.getElementById('myChart'),
+    config
+  );
+</script>
