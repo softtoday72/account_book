@@ -13,7 +13,7 @@
       </nav>
     </div>
 
-    <div class="col-10 border-start border-end ">
+    <div class="col-7 border-start border-end ">
       <div class="col">
         <ul class="nav nav-pills">
           <li class="nav-item px-3">
@@ -81,5 +81,51 @@
         </div>
       </div>
     </div>
+    
+    <div class="col-3">
+      <canvas id="dayliChart" width="40" height="100"></canvas>
+    </div>
+  
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('dayliChart');
+  const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Day1', 'Day2', 'Day3', 'Day4', 'Day5', 'Day6', 'Day7', 'Day8', 'Day9', 'Day10', 'Day11', 'Day12', 'Day13', 'Day14', 'Day15', 'Day16', 'Day17', 'Day18', 'Day19', 'Day20', 'Day21', 'Day22', 'Day23', 'Day24', 'Day25', 'Day26', 'Day27', 'Day28', 'Day29', 'Day30', 'Day31'],
+      datasets: [{
+        label: '單日消費',
+        data: [{{ charts }}],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1,
+        
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+       indexAxis: 'y',
+    }
+  });
+</script>

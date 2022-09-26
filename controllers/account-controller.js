@@ -163,10 +163,25 @@ const accountController = {
         raw: true
       })])
         .then(([accounts, categories]) => {
+          let total = 0
+          let chartData  = {}
           for (let i = 0; i < accounts.length; i++) {
             accounts[i].date = dayjs(accounts[i].date).format(`YYYY-MM-DD`)
+            accounts[i].chartIndex = Number(dayjs(accounts[i].date).format(`DD`))
+            if (accounts[i].chartIndex in chartData) {
+              chartData[accounts[i].chartIndex] += accounts[i].price
+            } else {
+              chartData[accounts[i].chartIndex] = accounts[i].price
+            }
           }
-          let total = 0
+          for (let i = 1 ; i <= 31; i++) {
+            if(!chartData[i]) {
+              chartData[i] = 0
+            }
+          }
+
+          let charts = [chartData[1], chartData[2], chartData[3], chartData[4], chartData[5], chartData[6], chartData[7], chartData[8], chartData[9], chartData[10], chartData[11], chartData[12], chartData[13], chartData[14], chartData[15], chartData[16], chartData[17], chartData[18], chartData[19], chartData[20], chartData[21], chartData[22], chartData[23], chartData[24], chartData[25], chartData[26], chartData[27], chartData[28], chartData[29], chartData[30], chartData[31]]
+          
           const categoryChange = {
             1: '飲食',
             2: '交通',
@@ -178,7 +193,7 @@ const accountController = {
             total += Number(accounts[i].price)
             accounts[i].categoryIdToString = categoryChange[accounts[i].categoryId]
           }
-          res.render('detail', { accounts, total, year, month, categories, categoryId, orderToString, order })
+          res.render('detail', { accounts, total, year, month, categories, categoryId, orderToString, order, charts })
         })
         .catch(error => {
           console.log(error)
@@ -238,6 +253,9 @@ const accountController = {
         res.redirect('/detail')
       })
       .catch(err => next(err))
+  },
+  getChart: (req, res, next) => {
+    res.render('chart')
   }
 }
 
