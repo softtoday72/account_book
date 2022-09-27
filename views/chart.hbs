@@ -29,9 +29,12 @@
             <input type="text" aria-label="keyword" name="keyword" value="{{keyword}}" class="form-control">
 
             <select class="form-control" id="categoryId" name="categoryId">
-              <option value="">全部</option>
+              {{#if categoryId}}
               <option value="{{categoryId}}">{{categoryIdToString}}</option>
-              
+              <option value="">全部</option>
+              {{else}}
+              <option value="">全部</option>
+              {{/if}}
               {{#each categories}}
               <option value="{{this.id}}">{{this.name}}</option>
               {{/each}}
