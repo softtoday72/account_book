@@ -7,14 +7,39 @@ const accountController = {
   
   getAccount: (req, res, next) => {
     const userId = req.user.id
-    const { year, month } = req.body
-    if (year && month) {
+    const year = req.body.year
+    const month = req.body.month
+    const currentYear = dayjs().format(`YYYY`)
+    const currentMonth = dayjs().format(`MM`)
+    let star = ''
+    let end = ''
+    
+    if (year) {
+      star += year
+      end += year
+    } else {
+      star += currentYear
+      end += currentYear
+    }
+    star += '/'
+    end += '/'
+    if (month) {
+      star += month
+      end += month
+    } else {
+      star += currentMonth
+      end += currentMonth
+    }
+
+    star = star + '/1'
+    end = end + '/31'
+
       Account.findAll({
         raw: true,
         nest: true,
         where: {
           date: {
-            [Op.between]: [`${year}/${month}/1`, `${year}/${month}/31`]
+            [Op.between]: [star, end]
           }
         },
         include: [{ model: User, where: { id: userId } }]
@@ -42,36 +67,7 @@ const accountController = {
           total = food + traffic + superMarket + bill + other
           res.render('account', { food, traffic, superMarket, bill, other, total, year, month })
         })
-    } else {
-    Account.findAll({
-      raw: true,
-      nest: true,
-      include: [{ model:User, where:{ id: userId }}]
-    })
-      .then( data => {
-        let food = 0
-        let traffic = 0
-        let superMarket = 0
-        let bill = 0
-        let other = 0
-        let total 
-        for(let i = 0 ; i < data.length ; i++) {
-          if(data[i].categoryId == 1) {
-            food = food + Number(data[i].price)
-          } else if(data[i].categoryId == 2) {
-            traffic += Number(data[i].price)
-          } else if (data[i].categoryId == 3) {
-            superMarket += Number(data[i].price)
-          } else if (data[i].categoryId == 4) {
-            bill += Number(data[i].price)
-          } else if (data[i].categoryId == 5) {
-            other += Number(data[i].price)
-          }       
-        }
-        total = food + traffic + superMarket + bill + other
-        
-        res.render('account', { food, traffic, superMarket,bill, other, total })
-      })}
+        .catch(err => next(err))
   },
   createExpensePage : (req, res, next) => {
     Category.findAll({
@@ -255,7 +251,74 @@ const accountController = {
       .catch(err => next(err))
   },
   getChart: (req, res, next) => {
-    res.render('chart')
+    const currentYear = dayjs().format(`YYYY`)
+    const currentMonth = dayjs().format(`MM`)
+    const currentTime = dayjs().format(`YYYY/MM/`)
+    const userId = req.user.id
+    const categoryId = req.body.categoryId
+    const keyword = req.body.keyword 
+    const date_star = req.body.date_star 
+    const date_end = req.body.date_end 
+    let star = ''
+    let end = ''
+    if (!date_star) {
+      star = currentYear + '/1/1' 
+    } else {
+      star = date_star
+    }
+    if (!date_end) {
+      end = currentYear + '/12/31'
+    } else {
+      end = date_end
+    }
+
+    Promise.all([
+      Account.findAll({
+        raw: true,
+        nest: true,
+        where: {
+          date: {
+            [Op.between]: [star, end]
+          },
+          ...keyword ? { name: {
+            [Op.or]: {
+              [Op.startsWith]: `${keyword}`,
+              [Op.substring]: `${keyword}`,
+              [Op.endsWith]: `${keyword}`
+            }
+          } } : {},
+          ...categoryId ? { categoryId } : {}
+        },
+        order: [
+          ['date', 'ASC']
+        ],
+        include: [
+          { model: User, where: { id: userId } }
+        ]
+      }), Category.findAll({
+        raw: true
+      })
+    ])
+    .then(([accounts,categories]) => {
+      const categoryChange = {
+        1: '飲食',
+        2: '交通',
+        3: '超市',
+        4: '帳單',
+        5: '其他'
+      }
+      let month_ = {}
+      const categoryIdToString = categoryChange[categoryId]
+      for (let i = 0 ; i < accounts.length; i++){
+        accounts[i].date = dayjs(accounts[i].date).format(`YYYY-MM-DD`)
+        accounts[i].categoryIdName = categoryChange[accounts[i].categoryId]
+      }
+ 
+
+      res.render('chart', { accounts, keyword, date_star, date_end, categories, categoryId, categoryIdToString })
+    })
+      .catch(err => next(err))
+    
   }
 }
 

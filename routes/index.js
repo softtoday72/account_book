@@ -44,6 +44,8 @@ router.put('/profile/:userId', authenticator, userController.editProfile)
 
 router.get('/chart', authenticator, accountController.getChart)
 
+router.post('/chart', authenticator, accountController.getChart)
+
 router.get('/admin/signin',adminController.signInPage)
 
 router.post('/admin/signin', passport.authenticate('local', { failureRedirect: '/admin/signin', failureFlash: true }), adminController.signIn)

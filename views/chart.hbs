@@ -1,33 +1,72 @@
-<canvas id="myChart" width="400" height="400"></canvas>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  const labels = [
-    '飲食',
-    '交通',
-    '超市',
-    '帳單',
-    '其他',
-  ];
+<div class="container pt-4">
+  <div class="row">
+    <div class="col-2 px-0">
+      <nav class="nav flex-column">
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/">首頁</a>
 
-  const data = {
-    labels: labels,
-    datasets: [{
-      label: '消費金額',
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(255, 99, 132)',
-      data: [1, 2, 3, 4, 5 ],
-    }]
-  };
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" style="width:50%"
+          href="/detail">詳細資料</a>
 
-  const config = {
-    type: 'bar',
-    data: data,
-    options: {}
-  };
-</script>
-<script>
-  const myChart = new Chart(
-    document.getElementById('myChart'),
-    config
-  );
-</script>
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/create">建立</a>
+
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/profile/{{user.id}}">帳戶設定</a>
+
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3 btn btn-outline-primary active" style="width:50%" href="/chart">進階搜尋</a>
+      </nav>
+    </div>
+
+    <div class="col-9 border-start border-end ">
+      <br>
+      <div class="col">
+        <form action="/chart" method="POST">
+          <div class="input-group" >
+            <span class="input-group-text" id="basic-addon3">時間, 關鍵字, 類別</span>
+            
+            <input type="date" name="date_star" class="form-control" id="date_star" value="{{date_star}}">
+           
+            <input type="date" name="date_end" class="form-control" id="date_end" value="{{date_end}}">
+            
+            <input type="text" aria-label="keyword" name="keyword" value="{{keyword}}" class="form-control">
+
+            <select class="form-control" id="categoryId" name="categoryId">
+              <option value="">全部</option>
+              <option value="{{categoryId}}">{{categoryIdToString}}</option>
+              
+              {{#each categories}}
+              <option value="{{this.id}}">{{this.name}}</option>
+              {{/each}}
+            </select>
+            
+            <button type="submit" class="btn btn-primary">查詢</button>
+          </div>
+        </form>
+      </div>
+
+      <br>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col" style="display: none">#</th>
+            <th scope="col">名稱</th>
+            <th scope="col">類別</th>
+            <th scope="col">金額</th>
+            <th scope="col">消費時間</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each accounts}}
+          <tr>
+            <th scope="row" style="display: none">{{ this.id }}</th>
+            <td>{{ this.name }}</td>
+            <td>{{ this.categoryIdName }}</td>
+            <td>{{ this.price }}</td>
+            <td>{{ this.date }}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      <br><br>
+      
+    </div>
+  </div>
+</div>
