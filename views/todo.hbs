@@ -32,7 +32,7 @@
               <a class="btn btn-success" href="./todos/{{ this.id }}">edit</a>
               
               <form action="./todos/{{ this.id }}?_method=DELETE" method="POST" style="display: inline;">
-                <button class="btn btn-danger" type="submit">delete</button>
+                <button class="btn btn-danger" onclick="return confirm(`確定要刪除 {{ this.name }} 嗎？`)" type="submit">delete</button>
               </form>
             </div>
           </div>
