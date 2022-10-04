@@ -5,6 +5,7 @@ const todo = require('./modules/todo')
 const account = require('./modules/account')
 const userController = require('../controllers/user-controller')
 const accountController = require('../controllers/account-controller')
+const todoController = require('../controllers/todo-controller')
 const { authenticator, adminAuthenticator } = require('../middleware/auth')
 const passport = require('../config/passport')
 const { generalErrorHandler } = require('../middleware/error-handler')
@@ -53,6 +54,18 @@ router.post('/admin/signin', passport.authenticate('local', { failureRedirect: '
 router.get('/admin', authenticator, adminAuthenticator, adminController.userTable)
 
 router.put('/admin/:userId', authenticator, adminAuthenticator, adminController.userEdit)
+
+router.get('/todos', authenticator, todoController.getTodo)
+
+router.get('/todos/create', authenticator, todoController.todoCreatePage)
+
+router.post('/todos/create', authenticator, todoController.todoCreate)
+
+router.get('/todos/:id', authenticator, todoController.getEditPage)
+
+router.put('/todos/:id', authenticator, todoController.todoEdit)
+
+router.delete('/todos/:id', authenticator, todoController.todoDelete)
 
 router.get('/', authenticator,accountController.getAccount)
 

@@ -1,0 +1,44 @@
+<div class="container pt-4">
+  <div class="row">
+    <div class="col-2 px-0">
+      <nav class="nav flex-column">
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" style="width:50%" href="/">首頁</a>
+    
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/detail">詳細資料</a>
+    
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/create">建立</a>
+    
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/profile/{{user.id}}">帳戶設定</a>
+    
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3" href="/chart">進階搜尋</a>
+
+        <a class="nav-link fs-5 fw-bold my-1 px-1 mb-3 btn btn-outline-primary active" style="width:50%" href="/todos">購物清單</a>
+      </nav>
+    </div>
+    
+    <div class="col-10 border-start border-end ">
+      <a href="/todos/create" class="btn btn-primary mb-3" style="width:10%">新增</a>
+      <ul class="list-group">
+        {{#each todos}}
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-auto me-auto">
+              <input class="align-middle" type="checkbox" name="is_done" {{#if this.is_done }} checked {{/if}} disabled>
+              <h4 class="d-inline ms-2 align-middle">
+                {{ this.name }}
+              </h4>
+            </div>
+            <div class="col-auto">
+              <a class="btn btn-success" href="./todos/{{ this.id }}">edit</a>
+              
+              <form action="./todos/{{ this.id }}?_method=DELETE" method="POST" style="display: inline;">
+                <button class="btn btn-danger" type="submit">delete</button>
+              </form>
+            </div>
+          </div>
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+</div>
