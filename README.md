@@ -4,8 +4,9 @@
 
 ## __介紹__
 是一個使用Express及MySQL打造的網頁記帳本，使用者需註冊之後才能使用，可以做基本的紀錄與搜尋。
-<img src="./img/index.PNG" width="200"><br>
-<img src="./img/detail.PNG" width="200"><br>
+
+<img src="./img/index.PNG" width="400"><br>
+<img src="./img/detail.PNG" width="400"><br>
 
 ## __功能簡介__ 
 
