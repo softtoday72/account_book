@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 const express = require('express')
 const exphbs = require('express-handlebars')
 const flash = require('connect-flash')
