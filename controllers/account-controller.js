@@ -42,7 +42,10 @@ const accountController = {
             [Op.between]: [star, end]
           }
         },
-        include: [{ model: User, where: { id: userId } }]
+        include: [
+          { model: User, where: { id: userId } },
+          { model: Category }
+        ]
       })
         .then(data => {
           let food = 0
@@ -52,15 +55,16 @@ const accountController = {
           let other = 0
           let total
           for (let i = 0; i < data.length; i++) {
-            if (data[i].categoryId == 1) {
+            console.log(data[i].Category.name)
+            if (data[i].Category.name == '飲食') {
               food = food + Number(data[i].price)
-            } else if (data[i].categoryId == 2) {
+            } else if (data[i].Category.name == '交通') {
               traffic += Number(data[i].price)
-            } else if (data[i].categoryId == 3) {
+            } else if (data[i].Category.name == '超市') {
               superMarket += Number(data[i].price)
-            } else if (data[i].categoryId == 4) {
+            } else if (data[i].Category.name == '帳單') {
               bill += Number(data[i].price)
-            } else if (data[i].categoryId == 5) {
+            } else if (data[i].Category.name == '其他') {
               other += Number(data[i].price)
             }
           }
@@ -153,7 +157,8 @@ const accountController = {
           ordering
         ],
         include: [
-          { model: User, where: { id: userId } }
+          { model: User, where: { id: userId } },
+          { model: Category }
         ]
       }), Category.findAll({
         raw: true
@@ -178,16 +183,9 @@ const accountController = {
 
           let charts = [chartData[1], chartData[2], chartData[3], chartData[4], chartData[5], chartData[6], chartData[7], chartData[8], chartData[9], chartData[10], chartData[11], chartData[12], chartData[13], chartData[14], chartData[15], chartData[16], chartData[17], chartData[18], chartData[19], chartData[20], chartData[21], chartData[22], chartData[23], chartData[24], chartData[25], chartData[26], chartData[27], chartData[28], chartData[29], chartData[30], chartData[31]]
           
-          const categoryChange = {
-            1: '飲食',
-            2: '交通',
-            3: '超市',
-            4: '帳單',
-            5: '其他'
-          }
+          
           for (let i = 0; i < accounts.length; i++) {
             total += Number(accounts[i].price)
-            accounts[i].categoryIdToString = categoryChange[accounts[i].categoryId]
           }
           res.render('detail', { accounts, total, year, month, categories, categoryId, orderToString, order, charts })
         })
@@ -207,16 +205,8 @@ const accountController = {
     ])
       .then(([account, categories]) => {
         if (!account) throw new Error("紀錄不存在!")
-        const categoryChange = {
-          1: '飲食',
-          2: '交通',
-          3: '超市',
-          4: '帳單',
-          5: '其他'
-        }
-        const categoryIdToString = categoryChange[account.categoryId]
         account.date = dayjs(account.date).format(`YYYY-MM-DD`)
-        res.render('edit', { account, categories, categoryIdToString })
+        res.render('edit', { account, categories })
       })
       .catch(err => next(err))
   },
@@ -293,32 +283,21 @@ const accountController = {
           ['date', 'ASC']
         ],
         include: [
-          { model: User, where: { id: userId } }
+          { model: User, where: { id: userId } },
+          { model: Category }
         ]
       }), Category.findAll({
         raw: true
       })
     ])
     .then(([accounts,categories]) => {
-      const categoryChange = {
-        1: '飲食',
-        2: '交通',
-        3: '超市',
-        4: '帳單',
-        5: '其他'
-      }
       let month_ = {}
-      const categoryIdToString = categoryChange[categoryId]
       for (let i = 0 ; i < accounts.length; i++){
         accounts[i].date = dayjs(accounts[i].date).format(`YYYY-MM-DD`)
-        accounts[i].categoryIdName = categoryChange[accounts[i].categoryId]
       }
- 
-
-      res.render('chart', { accounts, keyword, date_star, date_end, categories, categoryId, categoryIdToString })
+      res.render('chart', { accounts, keyword, date_star, date_end, categories, categoryId })
     })
       .catch(err => next(err))
-    
   }
 }
 
