@@ -72,3 +72,4 @@ App is running on http://localhost:3000
 * passport-local 1.0.0
 * sequelize 5.21.13
 * sequelize-cli 5.5.1
+* dotenv 8.2.0
