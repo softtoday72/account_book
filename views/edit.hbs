@@ -11,7 +11,7 @@
 
   <div class="form-row mb-3">
     <select class="form-control" id="categoryId" name="categoryId">
-      {{#if account.Category.name}}
+      {{#if account}}
       <option value="{{account.categoryId}}">{{account.Category.name}}</option>
       {{else}}<option>類別</option>
       {{/if}}

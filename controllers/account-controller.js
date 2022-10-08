@@ -196,14 +196,22 @@ const accountController = {
         })
   },
   editExpensePage: (req, res, next) => {
+    const userId = req.user.id
     Promise.all([
       Account.findByPk(req.params.id, {
-        raw: true
+        raw: true,
+        nest: true,        
+        include: [
+          { model: User, where: { id: userId } },
+          { model: Category }
+        ]
+        
       }), Category.findAll({
         raw: true
       })
     ])
       .then(([account, categories]) => {
+        console.log(account)
         if (!account) throw new Error("紀錄不存在!")
         account.date = dayjs(account.date).format(`YYYY-MM-DD`)
         res.render('edit', { account, categories })
